@@ -1,0 +1,16 @@
+build
+delta-spark==2.0.1
+openpyxl
+pandas
+pyarrow
+pydantic
+pydeequ
+pyspark==3.2.1
+pytest
+pytest-cov
+python-dateutil
+setuptools>=61.0
+Sphinx
+sphinx-rtd-dark-mode
+sphinx-rtd-theme
+wheel

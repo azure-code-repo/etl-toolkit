@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build wheel",
+            "type": "shell",
+            "command": "python -m build"
+        },
+        {
+            "label": "build docs",
+            "type": "shell",
+            "command": "sphinx-apidoc -f -o docs src/ananta -l -d 5 -M"
+        }
+    ]
+}

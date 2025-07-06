@@ -1,0 +1,57 @@
+# Python package
+# Create and test a Python package on multiple Python versions.
+# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/python
+
+trigger:
+- development
+
+pool:
+  vmImage: ubuntu-latest
+strategy:
+  matrix:
+    Python38:
+      python.version: '3.8.13'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '$(python.version)'
+  displayName: 'Use Python $(python.version)'
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
+
+- script: |
+    pip install twine
+  displayName: 'Install twine'
+
+
+- script: |
+    python -m build -w --no-isolation
+  displayName: 'build -args wheel no-isolation'
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: 'dist/'
+    Contents: '*.whl'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+    CleanTargetFolder: true
+    OverWrite: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'ananta_wheel'
+    publishLocation: 'Container'
+
+- script: |
+    python -m twine upload -r ananta_wheel --skip-existing --repository ananta-dev dist/*.whl --config-file=".pypirc" --verbose
+  displayName: 'upload to azure devops artifact feed'
