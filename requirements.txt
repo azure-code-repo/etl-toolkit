@@ -5,7 +5,7 @@ pandas
 pyarrow
 pydantic
 pydeequ
-pyspark==3.2.1
+pyspark==3.3.2
 pytest
 pytest-cov
 python-dateutil
